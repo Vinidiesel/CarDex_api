@@ -36,13 +36,15 @@ public class Engine extends RepresentationModel<Engine> implements Serializable 
     @Column(nullable = false, length = 10)
     private Integer fuel;
 
-    @OneToMany(mappedBy = "car")
+    @OneToMany(mappedBy = "engine")
     private Set<Car> car = new HashSet<>();
     @ManyToOne
+    @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 
-    public Engine(UUID id, String cylinders, Integer maximumEngineSpeed, String engineSuction, Integer maximumEnginePower, Double engineLiter, Fuel fuel, Manufacturer manufacturer) {
+    public Engine(UUID id, String name, String cylinders, Integer maximumEngineSpeed, String engineSuction, Integer maximumEnginePower, Double engineLiter, Fuel fuel, Manufacturer manufacturer) {
         this.id = id;
+        this.name = name;
         this.cylinders = cylinders;
         this.maximumEngineSpeed = maximumEngineSpeed;
         this.engineSuction = engineSuction;
@@ -62,6 +64,14 @@ public class Engine extends RepresentationModel<Engine> implements Serializable 
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCylinders() {

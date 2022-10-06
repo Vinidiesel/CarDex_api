@@ -2,6 +2,7 @@ package com.api.cars.models;
 
 import com.api.cars.models.enums.CarCategory;
 import com.api.cars.models.enums.EnginePosition;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -26,8 +27,10 @@ public class Car extends RepresentationModel<Car> implements Serializable {
     @Column(nullable = false, length = 5)
     private Double maxSpeed;
     @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date startOfProduction;
     @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date endOfProduction;
     @Column(nullable = false, length = 5)
     private Double zeroToAHundred;
@@ -40,8 +43,8 @@ public class Car extends RepresentationModel<Car> implements Serializable {
     private Integer enginePosition;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "transmission", cascade = CascadeType.ALL,
-        fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
     private Transmission transmission;
     @JsonIgnore
     @ManyToOne(optional = false)

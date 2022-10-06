@@ -1,6 +1,7 @@
 package com.api.cars.models;
 
 import com.api.cars.models.enums.Traction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
@@ -24,9 +25,8 @@ public class Transmission extends RepresentationModel<Transmission> implements S
     @Column(nullable = false, length = 4)
     private Integer traction;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id")
-    @MapsId
+    @OneToOne(mappedBy = "transmission", cascade = CascadeType.ALL,
+            optional = false)
     private Car car;
 
     public Transmission(UUID id, String exchange, Traction traction) {

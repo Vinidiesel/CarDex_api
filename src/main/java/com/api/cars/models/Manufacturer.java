@@ -1,5 +1,6 @@
 package com.api.cars.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -23,28 +24,28 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
     @Column(nullable = false, unique = true, length = 25)
     private String name;
     @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date foundation;
     @Column(nullable = false, length = 20)
     private String headOffice;
     @Column(nullable = false)
-    private String founder;
+    private String founderName;
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL)
     private Set<Car> car = new HashSet<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "engine", cascade = CascadeType.ALL)
-    @JoinColumn(name = "manufacturer_id")
+    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL)
     private Set<Engine> engines = new HashSet<>();
 
     public Manufacturer() {
     }
 
-    public Manufacturer(UUID id, String name, Date foundation, String headOffice, String founder) {
+    public Manufacturer(UUID id, String name, Date foundation, String headOffice, String founderName) {
         this.id = id;
         this.name = name;
         this.foundation = foundation;
         this.headOffice = headOffice;
-        this.founder = founder;
+        this.founderName = founderName;
     }
 
     public UUID getId() {
@@ -79,12 +80,12 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
         this.headOffice = headOffice;
     }
 
-    public String getFounder() {
-        return founder;
+    public String getFounderName() {
+        return founderName;
     }
 
-    public void setFounder(String founder) {
-        this.founder = founder;
+    public void setFounderName(String founder) {
+        this.founderName = founder;
     }
 
     public Set<Car> getCar() {
