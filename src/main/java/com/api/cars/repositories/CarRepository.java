@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface CarRepository extends JpaRepository<Car, UUID>{
+public interface CarRepository extends JpaRepository<Car, UUID> {
 
     @Override
-    boolean existsById(UUID uuid);
+    boolean existsById(UUID id);
     boolean existsByModelCarAndCarCategory(String modelCar, Integer carCategory);
+
     Optional<Car> findCarByModelCar(String modelCar);
 
 }

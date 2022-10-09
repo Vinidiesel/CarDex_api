@@ -50,6 +50,6 @@ public class ManufacturerService {
 
     @Transactional
     public void delete(Manufacturer manufacturer){
-        manufacturerRepository.delete(manufacturer);
+            manufacturerRepository.delete(manufacturer);
     }
 }
