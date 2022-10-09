@@ -40,16 +40,12 @@ public class ManufacturerService {
         return manufacturerRepository.findById(id);
     }
 
-    public Optional<Manufacturer> findByName(String name) {
-        return manufacturerRepository.findByName(name);
-    }
-
-    public Optional<Manufacturer> findByFounderName(String founderName) {
-        return manufacturerRepository.findByFounderName(founderName);
-    }
-
     @Transactional
     public void delete(Manufacturer manufacturer){
             manufacturerRepository.delete(manufacturer);
+    }
+
+    public Optional<Manufacturer> findByNameAndFounderName(String name, String founder) {
+        return manufacturerRepository.findByNameAndFounderName(name, founder);
     }
 }

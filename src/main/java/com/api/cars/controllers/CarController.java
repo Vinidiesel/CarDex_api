@@ -2,7 +2,6 @@ package com.api.cars.controllers;
 
 import com.api.cars.dtos.CarDto;
 import com.api.cars.models.Car;
-import com.api.cars.models.Manufacturer;
 import com.api.cars.services.CarService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -39,7 +38,7 @@ public class CarController {
             String model = car.getModelCar();
             car.add(linkTo(methodOn(CarController.class).getCarByModel(model)).withSelfRel());
         }
-        return  new ResponseEntity<Page<Car>>(carPage, HttpStatus.OK);
+        return new ResponseEntity<>(carPage, HttpStatus.OK);
     }
 
 
@@ -55,46 +54,40 @@ public class CarController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Object> getCarById(@PathVariable(value = "id") UUID id){
-        Optional<Car> carOptional = carService.findById(id);
-        return carOptional.<ResponseEntity<Object>>map(car -> ResponseEntity.status(HttpStatus.OK).body(car)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found!"));
+        return findById(id).<ResponseEntity<Object>>map(car -> ResponseEntity.status(HttpStatus.OK).body(car)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found!"));
     }
 
     @GetMapping("/model/{model}")
     public ResponseEntity<Object> getCarByModel(@PathVariable(value = "model") String model){
-        Optional<Car> carOptional = carService.findByModel(model);
-        return carOptional.<ResponseEntity<Object>>map(car -> ResponseEntity.status(HttpStatus.OK).body(car)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found!"));
+        return findByModel(model).<ResponseEntity<Object>>map(car -> ResponseEntity.status(HttpStatus.OK).body(car)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found!"));
     }
 
     @DeleteMapping("/id/{id}")
     public ResponseEntity<Object> deleteCarById(@PathVariable(value = "id") UUID id){
-        Optional<Car> carOptional = carService.findById(id);
-        if (carOptional.isEmpty()){
+        if (findById(id).isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car nor found!");
         }
-        carService.delete(carOptional.get());
+        carService.delete(findById(id).get());
         return ResponseEntity.status(HttpStatus.OK).body("Car is deleted successfully!");
     }
 
     @DeleteMapping("/model/{model}")
     public ResponseEntity<Object> deleteCarByModel(@PathVariable(value = "model") String model){
-        Optional<Car> carOptional = carService.findByModel(model);
-        if (carOptional.isEmpty()){
+        if (findByModel(model).isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car nor found!");
         }
-        carService.delete(carOptional.get());
+        carService.delete(findByModel(model).get());
         return ResponseEntity.status(HttpStatus.OK).body("Car is deleted successfully!");
     }
 
     @PutMapping("/id/{id}")
     public ResponseEntity<Object> updateCarById(@PathVariable(value = "id") UUID id, @RequestBody @Valid CarDto carDto){
-        Optional<Car> carOptional = carService.findById(id);
-        return getObjectResponseEntity(carDto, carOptional);
+        return getObjectResponseEntity(carDto, findById(id));
     }
 
     @PutMapping("/model/{model}")
     public ResponseEntity<Object> updateCarByModel(@PathVariable(value = "model") String model, @RequestBody @Valid CarDto carDto){
-        Optional<Car> carOptional = carService.findByModel(model);
-        return getObjectResponseEntity(carDto, carOptional);
+        return getObjectResponseEntity(carDto, findByModel(model));
     }
 
     private ResponseEntity<Object> getObjectResponseEntity(@RequestBody @Valid CarDto carDto, Optional<Car> carOptional) {
@@ -105,6 +98,14 @@ public class CarController {
         BeanUtils.copyProperties(carDto, car);
         car.setId(carOptional.get().getId());
         return ResponseEntity.status(HttpStatus.OK).body(carService.save(car));
+    }
+
+    private Optional<Car> findById(UUID id){
+        return carService.findById(id);
+    }
+
+    private Optional<Car> findByModel(String model){
+        return carService.findByModel(model);
     }
 
 }

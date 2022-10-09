@@ -12,8 +12,6 @@ public interface ManufacturerRepository extends JpaRepository<Manufacturer, UUID
     boolean existsById(UUID uuid);
     boolean existsByNameAndFounderName(String name, String founderName);
 
-    Optional<Manufacturer> findByName(String name);
-
-    Optional<Manufacturer> findByFounderName(String founderName);
+    Optional<Manufacturer> findByNameAndFounderName(String name, String founderName);
 
 }
