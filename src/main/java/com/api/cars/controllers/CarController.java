@@ -54,12 +54,20 @@ public class CarController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Object> getCarById(@PathVariable(value = "id") UUID id){
-        return findById(id).<ResponseEntity<Object>>map(car -> ResponseEntity.status(HttpStatus.OK).body(car)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found!"));
+        if (findById(id).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        findById(id).get().add(linkTo(methodOn(CarController.class).getAllCar(null)).withRel("All cars"));
+        return new ResponseEntity<>(findById(id).get(), HttpStatus.OK);
     }
 
     @GetMapping("/model/{model}")
     public ResponseEntity<Object> getCarByModel(@PathVariable(value = "model") String model){
-        return findByModel(model).<ResponseEntity<Object>>map(car -> ResponseEntity.status(HttpStatus.OK).body(car)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found!"));
+        if (findByModel(model).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        findByModel(model).get().add(linkTo(methodOn(CarController.class).getAllCar(null)).withRel("All cars"));
+        return new ResponseEntity<>(findByModel(model).get(), HttpStatus.OK);
     }
 
     @DeleteMapping("/id/{id}")

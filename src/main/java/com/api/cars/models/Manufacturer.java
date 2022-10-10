@@ -30,22 +30,25 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
     private String headOffice;
     @Column(nullable = false)
     private String founderName;
+    @Column
+    private String logo;
 
     @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL)
-    private Set<Car> car = new HashSet<>();
+    private final Set<Car> car = new HashSet<>();
     @JsonIgnore
     @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL)
-    private Set<Engine> engines = new HashSet<>();
+    private final Set<Engine> engines = new HashSet<>();
 
     public Manufacturer() {
     }
 
-    public Manufacturer(UUID id, String name, Date foundation, String headOffice, String founderName) {
+    public Manufacturer(UUID id, String name, Date foundation, String headOffice, String founderName, String logo) {
         this.id = id;
         this.name = name;
         this.foundation = foundation;
         this.headOffice = headOffice;
         this.founderName = founderName;
+        this.logo = logo;
     }
 
     public UUID getId() {
@@ -86,6 +89,14 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
 
     public void setFounderName(String founder) {
         this.founderName = founder;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public Set<Car> getCar() {

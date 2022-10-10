@@ -55,12 +55,20 @@ public class ManufacturerController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Object> getManufacturerById(@PathVariable(value = "id") UUID id){
-        return findById(id).<ResponseEntity<Object>>map(manufacturer -> ResponseEntity.status(HttpStatus.OK).body(manufacturer)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Manufacturer not found!"));
+        if (findById(id).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        findById(id).get().add(linkTo(methodOn(ManufacturerController.class).getAllManufacturers(null)).withRel("All manufacturers"));
+        return new ResponseEntity<>(findById(id).get(), HttpStatus.OK);
     }
 
     @GetMapping("/name/founder/{name}/{founder}")
     public ResponseEntity<Object> getManufacturerByNameAndFounder(@PathVariable(value = "name") String name, @PathVariable(value = "founder") String founder){
-        return findByNameAndFounder(name, founder).<ResponseEntity<Object>>map(manufacturer -> ResponseEntity.status(HttpStatus.OK).body(manufacturer)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Manufacturer not found!"));
+        if (findByNameAndFounder(name, founder).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        findByNameAndFounder(name, founder).get().add(linkTo(methodOn(ManufacturerController.class).getAllManufacturers(null)).withRel("All manufacturers"));
+        return new ResponseEntity<>(findByNameAndFounder(name, founder).get(), HttpStatus.OK);
     }
 
     @DeleteMapping("/id/{id}")
@@ -81,7 +89,7 @@ public class ManufacturerController {
         return ResponseEntity.status(HttpStatus.OK).body("Manufacturer is deleted successfully!");
     }
 
-    @PutMapping("id/{id}")
+    @PutMapping("/id/{id}")
     public ResponseEntity<Object> updateManufacturerById(@PathVariable(value = "id") UUID id, @RequestBody @Valid ManufacturerDto manufacturerDto){
         return getObjectResponseEntity(manufacturerDto, findById(id));
     }

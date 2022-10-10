@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -36,6 +35,8 @@ public class Car extends RepresentationModel<Car> implements Serializable {
     private Double zeroToAHundred;
     @Column(nullable = false, length = 12)
     private Integer unitsProduced;
+    @Column
+    private String carImage;
 
     @Column(nullable = false, length = 20)
     private Integer carCategory;
@@ -63,7 +64,7 @@ public class Car extends RepresentationModel<Car> implements Serializable {
         this.transmission = transmission;
     }
 
-    public Car(UUID id, String modelCar, Double maxSpeed, Date startOfProduction, Date endOfProduction, Double zeroToAHundred, Integer unitsProduced, CarCategory carCategory, EnginePosition enginePosition, Transmission transmission, Manufacturer manufacturer, Engine engine) {
+    public Car(UUID id, String modelCar, Double maxSpeed, Date startOfProduction, Date endOfProduction, Double zeroToAHundred, Integer unitsProduced, String carImage, CarCategory carCategory, EnginePosition enginePosition, Transmission transmission, Manufacturer manufacturer, Engine engine) {
         this.id = id;
         this.modelCar = modelCar;
         this.maxSpeed = maxSpeed;
@@ -71,6 +72,7 @@ public class Car extends RepresentationModel<Car> implements Serializable {
         this.endOfProduction = endOfProduction;
         this.zeroToAHundred = zeroToAHundred;
         this.unitsProduced = unitsProduced;
+        this.carImage = carImage;
         setCarCategory(carCategory);
         setEnginePosition(enginePosition);
         this.transmission = transmission;
@@ -138,6 +140,14 @@ public class Car extends RepresentationModel<Car> implements Serializable {
         this.unitsProduced = unitsProduced;
     }
 
+    public String getCarImage() {
+        return carImage;
+    }
+
+    public void setCarImage(String carImage) {
+        this.carImage = carImage;
+    }
+
     public CarCategory getCarCategory() {
         return CarCategory.valueOf(carCategory);
     }
@@ -152,6 +162,22 @@ public class Car extends RepresentationModel<Car> implements Serializable {
 
     public void setEnginePosition(EnginePosition enginePosition) {
         this.enginePosition = enginePosition.getCode();
+    }
+
+    public Manufacturer getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
     }
 
     //produção,peso,aceleração,unidades produzidas

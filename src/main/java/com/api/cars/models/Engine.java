@@ -37,7 +37,7 @@ public class Engine extends RepresentationModel<Engine> implements Serializable 
     private Integer fuel;
 
     @OneToMany(mappedBy = "engine")
-    private Set<Car> car = new HashSet<>();
+    private final Set<Car> car = new HashSet<>();
     @ManyToOne
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
