@@ -2,14 +2,14 @@ package com.api.cars.models;
 
 import com.api.cars.models.enums.CarCategory;
 import com.api.cars.models.enums.EnginePosition;
+import com.api.cars.models.enums.Traction;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -21,50 +21,41 @@ public class Car extends RepresentationModel<Car> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    @Column(nullable = false, unique = true, length = 10)
+    @Column(nullable = false, unique = true, length = 40)
     private String modelCar;
     @Column(nullable = false, length = 5)
     private Double maxSpeed;
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date startOfProduction;
+    private LocalDate startOfProduction;
     @Column
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date endOfProduction;
+    private LocalDate endOfProduction;
     @Column(nullable = false, length = 5)
     private Double zeroToAHundred;
     @Column(nullable = false, length = 12)
     private Integer unitsProduced;
     @Column
     private String carImage;
+    @Column(nullable = false, length = 25)
+    private String exchange;
 
+    @Column(nullable = false, length = 20)
+    private Integer traction;
     @Column(nullable = false, length = 20)
     private Integer carCategory;
     @Column(nullable = false, length = 20)
     private Integer enginePosition;
 
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    private Transmission transmission;
-    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
-    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "engine_id")
     private Engine engine;
 
-    public Transmission getTransmission() {
-        return transmission;
-    }
 
-    public void setTransmission(Transmission transmission) {
-        this.transmission = transmission;
-    }
-
-    public Car(UUID id, String modelCar, Double maxSpeed, Date startOfProduction, Date endOfProduction, Double zeroToAHundred, Integer unitsProduced, String carImage, CarCategory carCategory, EnginePosition enginePosition, Transmission transmission, Manufacturer manufacturer, Engine engine) {
+    public Car(UUID id, String modelCar, Double maxSpeed, LocalDate startOfProduction, LocalDate endOfProduction, Double zeroToAHundred, Integer unitsProduced, String carImage, String exchange, Traction traction, CarCategory carCategory, EnginePosition enginePosition, Manufacturer manufacturer, Engine engine) {
         this.id = id;
         this.modelCar = modelCar;
         this.maxSpeed = maxSpeed;
@@ -73,9 +64,10 @@ public class Car extends RepresentationModel<Car> implements Serializable {
         this.zeroToAHundred = zeroToAHundred;
         this.unitsProduced = unitsProduced;
         this.carImage = carImage;
+        this.exchange = exchange;
+        setTraction(traction);
         setCarCategory(carCategory);
         setEnginePosition(enginePosition);
-        this.transmission = transmission;
         this.manufacturer = manufacturer;
         this.engine = engine;
     }
@@ -108,19 +100,19 @@ public class Car extends RepresentationModel<Car> implements Serializable {
         this.maxSpeed = maxSpeed;
     }
 
-    public Date getStartOfProduction() {
+    public LocalDate getStartOfProduction() {
         return startOfProduction;
     }
 
-    public void setStartOfProduction(Date startOfProduction) {
+    public void setStartOfProduction(LocalDate startOfProduction) {
         this.startOfProduction = startOfProduction;
     }
 
-    public Date getEndOfProduction() {
+    public LocalDate getEndOfProduction() {
         return endOfProduction;
     }
 
-    public void setEndOfProduction(Date endOfProduction) {
+    public void setEndOfProduction(LocalDate endOfProduction) {
         this.endOfProduction = endOfProduction;
     }
 
@@ -146,6 +138,22 @@ public class Car extends RepresentationModel<Car> implements Serializable {
 
     public void setCarImage(String carImage) {
         this.carImage = carImage;
+    }
+
+    public String getExchange() {
+        return exchange;
+    }
+
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
+    }
+
+    public Traction getTraction() {
+        return Traction.valueOf(traction);
+    }
+
+    public void setTraction(Traction traction) {
+        this.traction = traction.getCode();
     }
 
     public CarCategory getCarCategory() {

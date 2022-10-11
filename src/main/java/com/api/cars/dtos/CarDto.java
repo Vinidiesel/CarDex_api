@@ -2,7 +2,6 @@ package com.api.cars.dtos;
 
 import com.api.cars.models.Engine;
 import com.api.cars.models.Manufacturer;
-import com.api.cars.models.Transmission;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -32,8 +31,7 @@ public class CarDto {
     @NotBlank
     private Integer enginePosition;
 
-    @NotBlank
-    private Transmission transmission;
+
     @NotBlank
     private Manufacturer manufacturer;
     @NotBlank

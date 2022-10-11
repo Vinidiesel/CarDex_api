@@ -7,7 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -25,24 +25,26 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
     private String name;
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date foundation;
-    @Column(nullable = false, length = 20)
+    private LocalDate foundation;
+    @Column(nullable = false, length = 25)
     private String headOffice;
     @Column(nullable = false)
     private String founderName;
     @Column
     private String logo;
 
-    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL)
-    private final Set<Car> car = new HashSet<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.REMOVE)
+    private final Set<Car> car = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.REMOVE)
     private final Set<Engine> engines = new HashSet<>();
 
     public Manufacturer() {
     }
 
-    public Manufacturer(UUID id, String name, Date foundation, String headOffice, String founderName, String logo) {
+    public Manufacturer(UUID id, String name, LocalDate foundation, String headOffice, String founderName, String logo) {
         this.id = id;
         this.name = name;
         this.foundation = foundation;
@@ -67,11 +69,11 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
         this.name = name;
     }
 
-    public Date getFoundation() {
+    public LocalDate getFoundation() {
         return foundation;
     }
 
-    public void setFoundation(Date foundation) {
+    public void setFoundation(LocalDate foundation) {
         this.foundation = foundation;
     }
 

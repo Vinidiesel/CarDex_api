@@ -36,6 +36,7 @@ public class Engine extends RepresentationModel<Engine> implements Serializable 
     @Column(nullable = false, length = 10)
     private Integer fuel;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "engine")
     private final Set<Car> car = new HashSet<>();
     @ManyToOne
