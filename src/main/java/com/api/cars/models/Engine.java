@@ -40,6 +40,9 @@ public class Engine extends RepresentationModel<Engine> implements Serializable 
     @OneToMany(mappedBy = "engine")
     private final Set<Car> car = new HashSet<>();
     @ManyToOne
+    @JoinColumn(name = "images_id")
+    private Images images;
+    @ManyToOne
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 
@@ -57,6 +60,14 @@ public class Engine extends RepresentationModel<Engine> implements Serializable 
 
     public Engine() {
 
+    }
+
+    public Images getImages() {
+        return images;
+    }
+
+    public void setImages(Images images) {
+        this.images = images;
     }
 
     public UUID getId() {

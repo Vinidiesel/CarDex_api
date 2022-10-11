@@ -37,8 +37,6 @@ public class Car extends RepresentationModel<Car> implements Serializable {
     private Double zeroToAHundred;
     @Column(nullable = false, length = 12)
     private Integer unitsProduced;
-    @Column
-    private String carImage;
     @Column(nullable = false, length = 25)
     private String exchange;
 
@@ -55,11 +53,12 @@ public class Car extends RepresentationModel<Car> implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "engine_id")
     private Engine engine;
-    @OneToMany(mappedBy = "car", cascade = CascadeType.REMOVE)
-    private final Set<Images> images = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "images_id")
+    private Images images;
 
 
-    public Car(UUID id, String modelCar, Double maxSpeed, LocalDate startOfProduction, LocalDate endOfProduction, Double zeroToAHundred, Integer unitsProduced, String carImage, String exchange, Traction traction, CarCategory carCategory, EnginePosition enginePosition, Manufacturer manufacturer, Engine engine) {
+    public Car(UUID id, String modelCar, Double maxSpeed, LocalDate startOfProduction, LocalDate endOfProduction, Double zeroToAHundred, Integer unitsProduced, String exchange, Traction traction, CarCategory carCategory, EnginePosition enginePosition, Manufacturer manufacturer, Engine engine) {
         this.id = id;
         this.modelCar = modelCar;
         this.maxSpeed = maxSpeed;
@@ -67,7 +66,6 @@ public class Car extends RepresentationModel<Car> implements Serializable {
         this.endOfProduction = endOfProduction;
         this.zeroToAHundred = zeroToAHundred;
         this.unitsProduced = unitsProduced;
-        this.carImage = carImage;
         this.exchange = exchange;
         setTraction(traction);
         setCarCategory(carCategory);
@@ -136,14 +134,6 @@ public class Car extends RepresentationModel<Car> implements Serializable {
         this.unitsProduced = unitsProduced;
     }
 
-    public String getCarImage() {
-        return carImage;
-    }
-
-    public void setCarImage(String carImage) {
-        this.carImage = carImage;
-    }
-
     public String getExchange() {
         return exchange;
     }
@@ -190,6 +180,14 @@ public class Car extends RepresentationModel<Car> implements Serializable {
 
     public void setEngine(Engine engine) {
         this.engine = engine;
+    }
+
+    public Images getImages() {
+        return images;
+    }
+
+    public void setImages(Images images) {
+        this.images = images;
     }
 
     //produção,peso,aceleração,unidades produzidas

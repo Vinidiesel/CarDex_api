@@ -36,7 +36,9 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
     @JsonIgnore
     @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.REMOVE)
     private final Set<Car> car = new HashSet<>();
-
+    @ManyToOne
+    @JoinColumn(name = "images_id")
+    private Images images;
     @JsonIgnore
     @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.REMOVE)
     private final Set<Engine> engines = new HashSet<>();
@@ -51,6 +53,14 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
         this.headOffice = headOffice;
         this.founderName = founderName;
         this.logo = logo;
+    }
+
+    public Images getImages() {
+        return images;
+    }
+
+    public void setImages(Images images) {
+        this.images = images;
     }
 
     public UUID getId() {

@@ -2,6 +2,7 @@ package com.api.cars.controllers;
 
 import com.api.cars.dtos.CarDto;
 import com.api.cars.models.Car;
+import com.api.cars.models.Engine;
 import com.api.cars.services.CarService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
