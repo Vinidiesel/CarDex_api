@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -53,6 +55,8 @@ public class Car extends RepresentationModel<Car> implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "engine_id")
     private Engine engine;
+    @OneToMany(mappedBy = "car", cascade = CascadeType.REMOVE)
+    private final Set<Images> images = new HashSet<>();
 
 
     public Car(UUID id, String modelCar, Double maxSpeed, LocalDate startOfProduction, LocalDate endOfProduction, Double zeroToAHundred, Integer unitsProduced, String carImage, String exchange, Traction traction, CarCategory carCategory, EnginePosition enginePosition, Manufacturer manufacturer, Engine engine) {

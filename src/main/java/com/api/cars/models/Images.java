@@ -17,7 +17,14 @@ public class Images extends RepresentationModel<Car> implements Serializable {
     private Byte[] data;
 
     @ManyToOne
-    private
+    @JoinColumn(name = "car_id")
+    private Car car;
+    @ManyToOne
+    @JoinColumn(name = "manufacturer_id")
+    private Manufacturer manufacturer;
+    @ManyToOne
+    @JoinColumn(name = "engine_id")
+    private Engine engine;
 
     public Long getId() {
         return id;
