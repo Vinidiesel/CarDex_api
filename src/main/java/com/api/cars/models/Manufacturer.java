@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -30,37 +33,34 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
     private String headOffice;
     @Column(nullable = false)
     private String founderName;
-    @Column
-    private String logo;
 
     @JsonIgnore
     @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.REMOVE)
     private final Set<Car> car = new HashSet<>();
-    @ManyToOne
-    @JoinColumn(name = "images_id")
-    private Images images;
     @JsonIgnore
     @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.REMOVE)
     private final Set<Engine> engines = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "manufacturer_images",
+            joinColumns = {
+                    @JoinColumn(name = "manufacturer_id")
+
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "images_id")
+            }
+    )
+    private Set<Images> manufacturerImages = new HashSet<>();
 
     public Manufacturer() {
     }
 
-    public Manufacturer(UUID id, String name, LocalDate foundation, String headOffice, String founderName, String logo) {
+    public Manufacturer(UUID id, String name, LocalDate foundation, String headOffice, String founderName) {
         this.id = id;
         this.name = name;
         this.foundation = foundation;
         this.headOffice = headOffice;
         this.founderName = founderName;
-        this.logo = logo;
-    }
-
-    public Images getImages() {
-        return images;
-    }
-
-    public void setImages(Images images) {
-        this.images = images;
     }
 
     public UUID getId() {
@@ -103,14 +103,6 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
         this.founderName = founder;
     }
 
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
-
     public Set<Car> getCar() {
         return car;
     }
@@ -119,4 +111,11 @@ public class Manufacturer extends RepresentationModel<Manufacturer> implements S
         return engines;
     }
 
+    public Set<Images> getManufacturerImages() {
+        return manufacturerImages;
+    }
+
+    public void setManufacturerImages(Set<Images> manufacturerImages) {
+        this.manufacturerImages = manufacturerImages;
+    }
 }

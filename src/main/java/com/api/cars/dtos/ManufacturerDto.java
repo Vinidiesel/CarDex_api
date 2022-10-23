@@ -3,21 +3,21 @@ package com.api.cars.dtos;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
-import java.util.UUID;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import java.time.LocalDate;
 
 @Data
 public class ManufacturerDto {
 
     @NotBlank
-    private UUID id;
-    @NotBlank
     private String name;
-    @NotBlank
-    private Date foundation;
+    @NotNull
+    @Past
+    private LocalDate foundation;
     @NotBlank
     private String headOffice;
     @NotBlank
-    private String founder;
+    private String founderName;
 
 }

@@ -40,13 +40,21 @@ public class Engine extends RepresentationModel<Engine> implements Serializable 
     @OneToMany(mappedBy = "engine")
     private final Set<Car> car = new HashSet<>();
     @ManyToOne
-    @JoinColumn(name = "images_id")
-    private Images images;
-    @ManyToOne
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "engine_images",
+            joinColumns = {
+                    @JoinColumn(name = "engine_id")
 
-    public Engine(UUID id, String name, String cylinders, Integer maximumEngineSpeed, String engineSuction, Integer maximumEnginePower, Double engineLiter, Fuel fuel, Manufacturer manufacturer) {
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "images_id")
+            }
+    )
+    private Set<Images> engineImages = new HashSet<>();
+
+    public Engine(UUID id,String name, String cylinders, Integer maximumEngineSpeed, String engineSuction, Integer maximumEnginePower, Double engineLiter, Fuel fuel, Manufacturer manufacturer) {
         this.id = id;
         this.name = name;
         this.cylinders = cylinders;
@@ -60,14 +68,6 @@ public class Engine extends RepresentationModel<Engine> implements Serializable 
 
     public Engine() {
 
-    }
-
-    public Images getImages() {
-        return images;
-    }
-
-    public void setImages(Images images) {
-        this.images = images;
     }
 
     public UUID getId() {
@@ -144,5 +144,13 @@ public class Engine extends RepresentationModel<Engine> implements Serializable 
 
     public void setManufacturer(Manufacturer manufacturer) {
         this.manufacturer = manufacturer;
+    }
+
+    public Set<Images> getEngineImages() {
+        return engineImages;
+    }
+
+    public void setEngineImages(Set<Images> engineImages) {
+        this.engineImages = engineImages;
     }
 }

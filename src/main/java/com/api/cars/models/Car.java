@@ -4,6 +4,7 @@ import com.api.cars.models.enums.CarCategory;
 import com.api.cars.models.enums.EnginePosition;
 import com.api.cars.models.enums.Traction;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
@@ -53,9 +54,17 @@ public class Car extends RepresentationModel<Car> implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "engine_id")
     private Engine engine;
-    @ManyToOne
-    @JoinColumn(name = "images_id")
-    private Images images;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "car_images",
+        joinColumns = {
+                @JoinColumn(name = "car_id")
+
+        },
+        inverseJoinColumns = {
+            @JoinColumn(name = "images_id")
+        }
+    )
+    private Set<Images> carImages = new HashSet<>();
 
 
     public Car(UUID id, String modelCar, Double maxSpeed, LocalDate startOfProduction, LocalDate endOfProduction, Double zeroToAHundred, Integer unitsProduced, String exchange, Traction traction, CarCategory carCategory, EnginePosition enginePosition, Manufacturer manufacturer, Engine engine) {
@@ -182,12 +191,12 @@ public class Car extends RepresentationModel<Car> implements Serializable {
         this.engine = engine;
     }
 
-    public Images getImages() {
-        return images;
+    public Set<Images> getCarImages() {
+        return carImages;
     }
 
-    public void setImages(Images images) {
-        this.images = images;
+    public void setCarImages(Set<Images> carImages) {
+        this.carImages = carImages;
     }
 
     //produção,peso,aceleração,unidades produzidas
